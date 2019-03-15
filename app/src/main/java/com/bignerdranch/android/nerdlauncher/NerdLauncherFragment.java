@@ -14,14 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import javax.security.auth.callback.PasswordCallback;
 
 public class NerdLauncherFragment extends Fragment {
     private RecyclerView mRecyclerView;
@@ -38,7 +36,7 @@ public class NerdLauncherFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_nerd_launcher, container, false);
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.app_recycler_view);
+        mRecyclerView = v.findViewById(R.id.app_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         setupAdapter();
@@ -68,18 +66,23 @@ public class NerdLauncherFragment extends Fragment {
     private class ActivityHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private ResolveInfo mResolveInfo;
         private TextView mNameTextView;
+        private ImageView mImageView;
 
-        public ActivityHolder(View itemView) {
-            super(itemView);
-            mNameTextView = (TextView) itemView;
+        ActivityHolder(View listItemView) {
+            super(listItemView);
+            mNameTextView = listItemView.findViewById(R.id.app_name);
             mNameTextView.setOnClickListener(this);
+            mImageView = listItemView.findViewById(R.id.app_icon);
         }
 
-        public void bindActivity(ResolveInfo resolveInfo) {
+        void bindActivity(ResolveInfo resolveInfo) {
             mResolveInfo = resolveInfo;
             PackageManager pm = getActivity().getPackageManager();
             String appName = mResolveInfo.loadLabel(pm).toString();
             mNameTextView.setText(appName);
+            if(mResolveInfo.loadIcon(pm) != null) {
+                mImageView.setImageDrawable(mResolveInfo.loadIcon(pm));
+            }
         }
 
         @Override
@@ -98,7 +101,7 @@ public class NerdLauncherFragment extends Fragment {
     private class ActivityAdapter extends RecyclerView.Adapter<ActivityHolder> {
         private final List<ResolveInfo> mActivities;
 
-        public ActivityAdapter(List<ResolveInfo> activities) {
+        ActivityAdapter(List<ResolveInfo> activities) {
              mActivities = activities;
         }
 
