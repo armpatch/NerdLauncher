@@ -106,7 +106,7 @@ public class NerdLauncherFragment extends Fragment {
         public ActivityHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View view = layoutInflater
-                    .inflate(android.R.layout.simple_list_item_1, parent, false);
+                    .inflate(R.layout.list_item_with_icon, parent, false);
             return new ActivityHolder(view);
         }
 
